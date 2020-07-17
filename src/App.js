@@ -1,22 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
-import Login from './components/Login/LoginWidget';
 import Grid from '@material-ui/core/Grid'
-import Register from './components/Register';
+import SiteAppBar from './components/AppBar/SiteAppBar';
+import StoryList from './components/StoryList/StoryList';
 
 function App() {
-
-  const [loginType, setLoginType] = useState('login');
-  const loginEnums = { login: 'login', register: 'register' }
-
-  const displayLoginByType = (loginOrRegister) => {
-    if (loginOrRegister === "login") {
-      return <LoginWidget changeState={() => setLoginType(loginEnums.register)}></LoginWidget>
-    } else {
-      return <Register changeState={() => setLoginType(loginEnums.login)}></Register>
-    }
-  }
-
   return (
     <Grid
       container
@@ -24,7 +12,8 @@ function App() {
       justify="center"
       alignItems="center"
     >
-      {displayLoginByType(loginType)}
+      <SiteAppBar></SiteAppBar>
+      <StoryList></StoryList>
     </Grid>
   );
 }
