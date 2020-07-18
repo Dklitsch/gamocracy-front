@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import RegisterForm from './RegisterForm';
-import LoginForm from './LoginForm';
+import RegisterForm from './Popup/RegisterForm';
+import LoginForm from './Popup/LoginForm';
 import { Button, Menu, MenuItem } from '@material-ui/core';
-import LoginEnums from './LoginEnums'
-import LoginPopup from './LoginPopup'
+import LoginPopup from './Popup/LoginPopup'
 
-const LoginWidget = (props) => {
+const LoginButton = (props) => {
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [menuIsOpen, setMenuIsOpen] = useState(false);
@@ -21,7 +20,7 @@ const LoginWidget = (props) => {
     };
 
     return(
-        <div>
+        <>
             <Button
                         color="inherit"
                         onClick={handleMenu}
@@ -39,9 +38,9 @@ const LoginWidget = (props) => {
                     <LoginPopup></LoginPopup>
                 </MenuItem>
             </Menu>
-        </div>
+        </>
     );
 
 };
 
-export default LoginWidget;
+export default LoginButton;

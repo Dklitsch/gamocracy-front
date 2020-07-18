@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import makeStyles from '@material-ui/styles/makeStyles';
 import { Grid, Button, TextField, Typography } from '@material-ui/core';
-import TwoPanelPopup from './Layout/TwoPanelPopup';
-import VerticalList from './Layout/VerticalList';
-import useGet from '../../../CustomHooks/useGet'
+import TwoPanelPopup from '../Layout/TwoPanelPopup';
+import VerticalList from '../Layout/VerticalList';
+import usePost from '../../../../CustomHooks/usePost'
+import apiResponse from '../../../../CustomHooks/ApiResponse';
 
 const useStyles = makeStyles((theme) => ({}));
 
@@ -12,13 +13,17 @@ const RegisterForm = (props) => {
     const classes = useStyles();
 
     const register = "Register";
+    const emptyRegisterResponse = {success : false, errors : {Email : null, Password : null}}
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [body, setBody] = useState(null);
-    const result = useGet(register, body) ?? {success : false, errors : {Email : null, Password : null}};
+    const result = usePost(register, body) ?? apiResponse(emptyRegisterResponse);
+    const emailErrorMessage = result.body !== null ? result.body.errors.Email : null;
+    const passwordErrorMessage = result.body !== null ? result.body.errors.Password : null;
 
-    if (result.success) {
+
+    if (result.status === 200) {
         props.changeState();
     }
 
@@ -38,16 +43,16 @@ const RegisterForm = (props) => {
                     name="email"
                     autoComplete="email"
                     autoFocus
-                    error={result.errors.Email != null}
-                    helperText={result.errors.Email}
+                    error={emailErrorMessage != null}
+                    helperText={emailErrorMessage}
                 />
                 <TextField 
                     label="Password"
                     value={password} 
                     onChange={e => setPassword(e.target.value)} 
                     required
-                    error={result.errors.Password != null}
-                    helperText={result.errors.Password}
+                    error={passwordErrorMessage != null}
+                    helperText={passwordErrorMessage}
                     type="password"
                 />
                 <Button variant="contained" type="submit">Register</Button>

@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import LoginWidget from './LoginWidget/LoginWidget';
+import LoginButton from './LoginButton/LoginButton';
 import Grid from '@material-ui/core/Grid'
-import { AppBar, Toolbar, } from '@material-ui/core';
+import { AppBar, Toolbar, Button, } from '@material-ui/core';
+import { useSelector } from 'react-redux';
+import { loggedInState } from './LoginButton/LoggedInSlice';
 
 const SiteAppBar = (props) => {
+
+    const loggedIn = useSelector(loggedInState);
 
     return (
 
@@ -15,7 +19,8 @@ const SiteAppBar = (props) => {
                     justify="flex-end"
                     alignItems="flex-end"
                 >
-                    <LoginWidget></LoginWidget>
+                    {!loggedIn && <LoginButton></LoginButton>}
+                    {loggedIn && <Button color="inherit">Logout</Button>}
                 </Grid>
             </Toolbar>
         </AppBar>
