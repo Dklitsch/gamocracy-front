@@ -15,6 +15,7 @@ const LoginForm = (props) => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    
     const [body, setBody] = useState(null);
     const [loginErrorMessage, setLoginErrorMessage] = useState(null);
     const result = usePost(loginEndpoint, body);
@@ -30,14 +31,12 @@ const LoginForm = (props) => {
         }
     }, [result])
     
-
     const handleSubmit = (e) => {
         e.preventDefault();
         setBody(JSON.stringify({ email: username, password : password}))
     }
 
-    const leftComponent = <Button onClick={props.changeState}>Not a member? Register</Button>
-    const rightComponent = (<form onSubmit={(e) => handleSubmit(e)}>
+    return (<form onSubmit={(e) => handleSubmit(e)}>
         <VerticalList>
             <TextField 
                 label="Username" 
@@ -61,10 +60,6 @@ const LoginForm = (props) => {
             <Button variant="contained" type="Submit">Login</Button>
         </VerticalList>
     </form>)
-
-    return (
-        <TwoPanelPopup left={leftComponent} right={rightComponent}></TwoPanelPopup>
-    )
 }
 
 export default LoginForm;

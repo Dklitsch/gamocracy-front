@@ -10,18 +10,13 @@ const useStyles = makeStyles((theme) => ({}));
 
 const RegisterForm = (props) => {
 
-    const classes = useStyles();
-
     const register = "Register";
-    const emptyRegisterResponse = {success : false, errors : {Email : null, Password : null}}
-
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [body, setBody] = useState(null);
-    const result = usePost(register, body) ?? apiResponse(emptyRegisterResponse);
+    const result = usePost(register, body);
     const emailErrorMessage = result.body !== null ? result.body.errors.Email : null;
     const passwordErrorMessage = result.body !== null ? result.body.errors.Password : null;
-
 
     if (result.status === 200) {
         props.changeState();
@@ -32,8 +27,7 @@ const RegisterForm = (props) => {
         setBody(JSON.stringify({ email: username, password: password}))
     }
 
-    const leftComponent = <Button onClick={props.changeState}>Already a member? Login</Button>
-    const rightComponent = (<form onSubmit={(e) => handleSubmit(e)}>
+    return (<form onSubmit={(e) => handleSubmit(e)}>
     <VerticalList>
                 <TextField 
                     label="Username" 
@@ -58,8 +52,6 @@ const RegisterForm = (props) => {
                 <Button variant="contained" type="submit">Register</Button>
         </VerticalList>
     </form>)
-
-    return (<TwoPanelPopup left={leftComponent} right={rightComponent} />)
 }
 
 export default RegisterForm;
