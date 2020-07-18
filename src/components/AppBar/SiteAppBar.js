@@ -2,12 +2,19 @@ import React, { useState } from 'react';
 import LoginButton from './LoginButton/LoginButton';
 import Grid from '@material-ui/core/Grid'
 import { AppBar, Toolbar, Button, } from '@material-ui/core';
-import { useSelector } from 'react-redux';
-import { loggedInState } from './LoginButton/LoggedInSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { loggedInState, logout } from './LoginButton/LoggedInSlice';
 
 const SiteAppBar = (props) => {
 
     const loggedIn = useSelector(loggedInState);
+    const dispatch = useDispatch();
+
+    const handleLogout = (e) => {
+        e.preventDefault();
+        localStorage.removeItem('id_token');
+        dispatch(logout());
+    }
 
     return (
 
@@ -20,7 +27,7 @@ const SiteAppBar = (props) => {
                     alignItems="flex-end"
                 >
                     {!loggedIn && <LoginButton></LoginButton>}
-                    {loggedIn && <Button color="inherit">Logout</Button>}
+                    {loggedIn && <Button color="inherit" onClick={e => handleLogout(e)}>Logout</Button>}
                 </Grid>
             </Toolbar>
         </AppBar>
