@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import Container from '@material-ui/core/Container';
 import makeStyles from '@material-ui/styles/makeStyles';
 import { Grid, Button, TextField, Typography } from '@material-ui/core';
 import TwoPanelPopup from './Layout/TwoPanelPopup';
 import VerticalList from './Layout/VerticalList';
+import useGet from '../../../CustomHooks/useGet'
 
 const useStyles = makeStyles((theme) => ({}));
 
-const Register = (props) => {
+const RegisterForm = (props) => {
 
     const classes = useStyles();
 
@@ -16,11 +16,9 @@ const Register = (props) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [body, setBody] = useState(null);
-    const [registrationSuccess, setRegistrationSuccess] = useState(false);
-    const [emailErrorMessage, setEmailErrorMessage] = useState(null);
-    const [passwordErrorMessage, setPasswordErrorMessage] = useState(null);
+    const result = useGet(register, body) ?? {success : false, errors : {Email : null, Password : null}};
 
-    if (registrationSuccess) {
+    if (result.success) {
         props.changeState();
     }
 
@@ -28,28 +26,6 @@ const Register = (props) => {
         e.preventDefault();
         setBody(JSON.stringify({ email: username, password: password}))
     }
-
-    useEffect(() => { 
-        async function fetchData() {
-            const response = await fetch(process.env.REACT_APP_API_ADDRESS + register, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8'
-                },
-                body: body
-            }) 
-            setRegistrationSuccess(response.ok);
-            if (!response.ok) {
-                let result = await response.json();
-                setEmailErrorMessage(result.errors.Email)
-                setPasswordErrorMessage(result.errors.Password)
-            }
-        }
-        if (body != null)
-        {
-            fetchData();
-        }
-    }, [body]);
 
     const leftComponent = <Button onClick={props.changeState}>Already a member? Login</Button>
     const rightComponent = (<form onSubmit={(e) => handleSubmit(e)}>
@@ -62,16 +38,16 @@ const Register = (props) => {
                     name="email"
                     autoComplete="email"
                     autoFocus
-                    error={emailErrorMessage != null}
-                    helperText={emailErrorMessage}
+                    error={result.errors.Email != null}
+                    helperText={result.errors.Email}
                 />
                 <TextField 
                     label="Password"
                     value={password} 
                     onChange={e => setPassword(e.target.value)} 
                     required
-                    error={passwordErrorMessage != null}
-                    helperText={passwordErrorMessage}
+                    error={result.errors.Password != null}
+                    helperText={result.errors.Password}
                     type="password"
                 />
                 <Button variant="contained" type="submit">Register</Button>
@@ -81,4 +57,4 @@ const Register = (props) => {
     return (<TwoPanelPopup left={leftComponent} right={rightComponent} />)
 }
 
-export default Register;
+export default RegisterForm;
