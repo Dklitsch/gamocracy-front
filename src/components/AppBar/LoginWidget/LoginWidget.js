@@ -1,33 +1,24 @@
 import React, { useState } from 'react';
-import Register from './RegisterForm';
+import RegisterForm from './RegisterForm';
 import LoginForm from './LoginForm';
-import { Button, Toolbar, Menu, MenuItem } from '@material-ui/core';
+import { Button, Menu, MenuItem } from '@material-ui/core';
+import LoginEnums from './LoginEnums'
+import LoginPopup from './LoginPopup'
 
 const LoginWidget = (props) => {
 
-    const [loginType, setLoginType] = useState('login');
-    const loginEnums = { login: 'login', register: 'register' }
-
     const [anchorEl, setAnchorEl] = useState(null);
-    const [open, setOpen] = useState(false);
+    const [menuIsOpen, setMenuIsOpen] = useState(false);
 
     const handleMenu = event => {
         setAnchorEl(event.currentTarget);
-        setOpen(true);
+        setMenuIsOpen(true);
     };
 
     const handleClose = () => {
-        setOpen(false);
+        setMenuIsOpen(false);
         setAnchorEl(null);
     };
-
-    const displayLoginByType = (loginOrRegister) => {
-        if (loginOrRegister === loginEnums.login) {
-          return <LoginForm changeState={() => setLoginType(loginEnums.register)}></LoginForm>
-        } else {
-          return <Register changeState={() => setLoginType(loginEnums.login)}></Register>
-        }
-      }
 
     return(
         <div>
@@ -41,10 +32,12 @@ const LoginWidget = (props) => {
                 id="login-menu"
                 anchorEl={anchorEl}
                 keepMounted
-                open={open}
+                open={menuIsOpen}
                 onClose={handleClose}
             >
-                <MenuItem>{displayLoginByType(loginType)}</MenuItem>
+                <MenuItem>
+                    <LoginPopup></LoginPopup>
+                </MenuItem>
             </Menu>
         </div>
     );
